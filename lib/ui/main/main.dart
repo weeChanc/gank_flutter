@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gank_flutter/ui/home/home.dart';
 import 'package:gank_flutter/ui/photo/photo_list.dart';
@@ -11,16 +13,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  var _bottomBar;
   var _currentPage = 0;
   var _pages = <Widget>[HomePage(), PhotoListView(), PhotoListView()];
 
-  _MainPageState() {
-    _bottomBar = buildBottomNavigationBar();
-  }
+  _MainPageState();
 
   void _incrementCounter() {
-    Navigator.pushNamed(context, "/photolist");
   }
 
   @override

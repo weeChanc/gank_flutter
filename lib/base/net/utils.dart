@@ -1,4 +1,3 @@
-library util;
 
 class Validater {
   static Map checkUrl(String url) {
