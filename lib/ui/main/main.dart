@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:gank_flutter/ui/home/home.dart';
 import 'package:gank_flutter/ui/photo/photo_list.dart';
+import 'package:gank_flutter/ui/setting/setting.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key, this.title}) : super(key: key);
@@ -14,12 +13,11 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   var _currentPage = 0;
-  var _pages = <Widget>[HomePage(), PhotoListView(), PhotoListView()];
+  var _pages = <Widget>[HomePage(), PhotoListView(), SettingPage()];
 
   _MainPageState();
 
-  void _incrementCounter() {
-  }
+  void _incrementCounter() {}
 
   @override
   Widget build(BuildContext context) {
@@ -74,11 +72,17 @@ class _MainPageState extends State<MainPage> {
             )),
       ],
       onTap: (pos) {
-        setState(() {
-          {
-            _currentPage = pos;
-          }
-        });
+        if (pos == 2) {
+          Navigator.pushNamed(context, "/setting");
+        } else if (pos == 1) {
+          Navigator.pushNamed(context, "/tzcs");
+        } else {
+          setState(() {
+            {
+              _currentPage = pos;
+            }
+          });
+        }
       },
     );
   }

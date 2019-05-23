@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gank_flutter/base/base.dart';
-import 'package:gank_flutter/platform/platform.dart';
 import 'package:gank_flutter/ui/home/model/tab_model.dart';
 import 'package:gank_flutter/ui/home/model/type.dart';
 import 'package:gank_flutter/widget/image.dart';
+
+import 'details.dart';
 
 class HomeTabPage extends BaseStatefulWidget {
   TabType _type;
@@ -62,7 +63,6 @@ class _HomeTabPageState extends BaseState<HomeTabPage> {
 
   // emmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm--=-=-===
 
-
   Widget _createPrettyTab() {
     return RefreshIndicator(
         key: _refreshStateKey,
@@ -72,13 +72,13 @@ class _HomeTabPageState extends BaseState<HomeTabPage> {
           itemBuilder: (ctx, pos) {
             return Container(
                 child: Card(
-                  child: SuperImage.network(
-                      model.data[pos],
-                      width: 120,
-                      height: 120,
-                      key: ValueKey(model.data[pos]),
-                  ),
-                ));
+              child: SuperImage.network(
+                model.data[pos],
+                width: 120,
+                height: 120,
+                key: ValueKey(model.data[pos]),
+              ),
+            ));
           },
         ),
         onRefresh: _onRefresh);
@@ -100,9 +100,10 @@ class _HomeTabPageState extends BaseState<HomeTabPage> {
   }
 
   ///emmmmmmmmmmmmmmmmmmmmmmmmm
-  Widget createListViewItem(data) =>
-      GestureDetector(
-        onTap: () => {platform.openWebView(data["url"])},
+  Widget createListViewItem(data) => GestureDetector(
+        onTap: () => {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailPage(data)))
+        },
         child: Card(
           margin: EdgeInsets.fromLTRB(8, 4, 8, 4),
           child: Container(

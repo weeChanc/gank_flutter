@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gank_flutter/ui/main/main.dart';
 import 'package:gank_flutter/ui/photo/photo_list.dart';
+import 'package:gank_flutter/ui/setting/setting.dart';
+import 'package:gank_flutter/ui/tzcs/tzcs.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,7 +17,9 @@ class MyApp extends StatelessWidget {
       ),
       home: MainPage(title: 'Flutter Demo Home Page'),
       routes: {
-        "/photolist": (ctx) => PhotoListView()
+        "/photolist": (ctx) => PhotoListView(),
+        "/setting": (ctx) => SettingPage(),
+        "/tzcs": (ctx) => SHIT(),
       },
     );
   }

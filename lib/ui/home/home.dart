@@ -24,8 +24,7 @@ class _HomeState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: DefaultTabController(
+    return DefaultTabController(
       length: tabTypes.length,
       child: Scaffold(
           appBar: TabBar(
@@ -36,6 +35,6 @@ class _HomeState extends State {
               tabs: tabTypes.map((type) => Tab(text: type.name)).toList()),
           body: TabBarView(
               children: tabTypes.map((type) => HomeTabPage(type)).toList())),
-    ));
+    );
   }
 }
