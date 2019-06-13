@@ -40,6 +40,7 @@ class _MainPageState extends State<MainPage> {
   GlobalKey key1 = new GlobalKey();
   GlobalKey key2 = new GlobalKey();
   GlobalKey activeKey;
+  FocusNode activeNode;
 
   @override
   void initState() {
@@ -48,12 +49,14 @@ class _MainPageState extends State<MainPage> {
     node1.addListener(() {
       if (node1.hasFocus) {
         activeKey = key1;
+        activeNode = node1;
       }
     });
 
     node2.addListener(() {
       if (node2.hasFocus) {
         activeKey = key2;
+        activeNode = node2;
       }
     });
   }
@@ -78,19 +81,16 @@ class _MainPageState extends State<MainPage> {
       children.add(TextField(
         autofocus: true,
         focusNode: node1,
-        key: key1,
       ));
       children.add(
         TextField(
           focusNode: node2,
-          key: key2,
         ),
       );
     } else {
       children.add(Text("good"));
       children.add(TextField(
         autofocus: true,
-        key: activeKey,
       ));
     }
 
