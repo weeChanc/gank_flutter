@@ -6,6 +6,6 @@ class PhyPage extends Page<PhyState, dynamic> {
   PhyPage() : super(
     initState: initState,
     view: buildView,
-    reducer:
+//    reducer:
   );
 }

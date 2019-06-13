@@ -11,21 +11,96 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
+class MyWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    print("create state");
+    return MyState();
+  }
+}
+
+class MyState extends State<MyWidget> {
+  @override
+  Widget build(BuildContext context) {
+    print("good");
+    ;
+    print(context.hashCode);
+    return Container();
+  }
+}
+
 class _MainPageState extends State<MainPage> {
   var _currentPage = 0;
   var _pages = <Widget>[HomePage(), PhotoListView(), SettingPage()];
 
   _MainPageState();
 
-  void _incrementCounter() {}
+  FocusNode node1 = new FocusNode();
+  FocusNode node2 = new FocusNode();
+  GlobalKey key1 = new GlobalKey();
+  GlobalKey key2 = new GlobalKey();
+  GlobalKey activeKey;
+
+  @override
+  void initState() {
+    node1 = new FocusNode();
+    node2 = new FocusNode();
+    node1.addListener(() {
+      if (node1.hasFocus) {
+        activeKey = key1;
+      }
+    });
+
+    node2.addListener(() {
+      if (node2.hasFocus) {
+        activeKey = key2;
+      }
+    });
+  }
+
+  void _incrementCounter() {
+    setState(() {
+      _currentPage++;
+    });
+  }
+
+  @override
+  void dispose() {
+    node1.dispose();
+    node2.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = new TextEditingController();
+    var children = <Widget>[];
+    if (_currentPage % 2 == 0) {
+      children.add(TextField(
+        autofocus: true,
+        focusNode: node1,
+        key: key1,
+      ));
+      children.add(
+        TextField(
+          focusNode: node2,
+          key: key2,
+        ),
+      );
+    } else {
+      children.add(Text("good"));
+      children.add(TextField(
+        autofocus: true,
+        key: activeKey,
+      ));
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: MyWidget(),
       ),
-      body: _pages[_currentPage],
+      body: Column(
+        children: children,
+      ),
       floatingActionButton: buildFab(),
       bottomNavigationBar: buildBottomNavigationBar(),
     );
