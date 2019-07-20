@@ -4,8 +4,7 @@ import 'view.dart';
 
 class PhyPage extends Page<PhyState, dynamic> {
   PhyPage() : super(
-    initState: initState,
-    view: buildView,
-    reducer:
+      initState: initState,
+      view: buildView,
   );
 }

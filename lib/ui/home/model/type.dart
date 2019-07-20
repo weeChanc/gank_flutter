@@ -14,18 +14,5 @@ class TabType {
   static const TabType BACK_END = const TabType(4, "后端",null);
   static const TabType PRETTY = const TabType (5,"福利",null);
 
-//  bool operator ==(other) {
-//    if(! (other is TabType)) return false;
-//    return this.id == other.id && this.name == other.name;
-//  }
-//
-//  @override
-//  int get hashCode {
-//    int result = 17;
-//    result = 31 * result + identityHashCode(id);
-//    result = 31 * result + identityHashCode(name);
-//    return result;
-//  }
-
 
 }
