@@ -15,14 +15,11 @@ class Screen extends StatefulWidget {
 }
 
 class StatelessContainer extends StatelessWidget {
-  final Color color = RandomColor().randomColor();
-
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 100,
       height: 100,
-      color: color,
     );
   }
 }
@@ -35,14 +32,12 @@ class StatefulContainer extends StatefulWidget {
 }
 
 class _StatefulContainerState extends State<StatefulContainer> {
-  final Color color = RandomColor().randomColor();
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 100,
       height: 100,
-      color: color,
     );
   }
 }
@@ -75,9 +70,3 @@ class _ScreenState extends State<Screen> {
   }
 }
 
-class RandomColor{
-  Color randomColor(){
-    int a = DateTime.now();
-    return Color.fromARGB(255,rand(),)
-  }
-}

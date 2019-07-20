@@ -62,6 +62,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_boost:
+    dependency: "direct main"
+    description:
+      name: flutter_boost
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.420"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -184,6 +191,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.7+1"
+  xservice_kit:
+    dependency: transitive
+    description:
+      name: xservice_kit
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.29"
 sdks:
   dart: ">=2.2.0 <3.0.0"
   flutter: ">=1.2.1 <2.0.0"

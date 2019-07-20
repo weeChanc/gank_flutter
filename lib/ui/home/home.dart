@@ -32,6 +32,7 @@ class _HomeState extends State {
                     currentTabStatus.val = tabTypes[pos];
                   }),
               labelColor: Colors.blue,
+              unselectedLabelColor: Colors.grey,
               tabs: tabTypes.map((type) => Tab(text: type.name)).toList()),
           body: TabBarView(
               children: tabTypes.map((type) => HomeTabPage(type)).toList())),

@@ -3,10 +3,11 @@ import 'package:gank_flutter/ui/history/history.dart';
 import 'package:gank_flutter/ui/home/home.dart';
 import 'package:gank_flutter/ui/photo/photo_list.dart';
 import 'package:gank_flutter/ui/setting/setting.dart';
+import 'package:flutter_boost/flutter_boost.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({Key key, this.title}) : super(key: key);
-  final String title;
+  MainPage({Key key}) : super(key: key);
+  final String title = "good";
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -17,6 +18,11 @@ class _MainPageState extends State<MainPage> {
   var _pages = <Widget>[HomePage(), HistoryPage(), SettingPage()];
 
   _MainPageState();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +68,14 @@ class _MainPageState extends State<MainPage> {
             )),
       ],
       onTap: (pos) {
+        if (pos == 1) {
+          FlutterBoost.singleton.openPage("native://main", null);
+        }
+
         if (pos == 2) {
           Navigator.pushNamed(context, "/setting");
-        }  else {
-          setState(() {
-            {
-              _currentPage = pos;
-            }
-          });
         }
+
       },
     );
   }
