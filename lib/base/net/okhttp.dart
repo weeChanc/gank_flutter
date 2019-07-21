@@ -23,7 +23,7 @@ class OkHttpClient {
 //      logger.e("baseurl is empty");
     }
 
-    if(url == null) {
+    if (url == null) {
       logger.e(" URL IS EMPTY");
       return null;
     }
@@ -38,6 +38,11 @@ class OkHttpClient {
     try {
       final originResp = await mClient.getUrl(path);
       final realResp = await originResp.close();
+
+      if (realResp.statusCode >= 404) {
+        return Future.error(Exception("HTTP ERROR CODE: ${realResp.statusCode} "));
+      }
+
       var resp = Response(realResp);
       if (interceptor != null) {
         resp = interceptor(resp);

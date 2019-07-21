@@ -16,7 +16,6 @@ class _HomeState extends State {
     TabType.FONT_END,
     TabType.ANDROID,
     TabType.IOS,
-//    TabType.BACK_END,
     TabType.PRETTY,
   ];
 

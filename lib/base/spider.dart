@@ -7,8 +7,8 @@ class WallPaperSpider {
 
 
     var resp = await _okClient.get("/search", {
-      "categories": "111",
-      "purity": "010",
+      "categories": "010",
+      "purity": "111",
       "sorting": "random",
       "order": "desc",
       "page": page

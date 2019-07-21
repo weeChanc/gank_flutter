@@ -12,7 +12,7 @@ class TabType {
   static const TabType ANDROID = const TabType(2, "安卓","Android");
   static const TabType IOS = const TabType(3, "苹果","iOS");
   static const TabType BACK_END = const TabType(4, "后端",null);
-  static const TabType PRETTY = const TabType (5,"福利",null);
+  static const TabType PRETTY = const TabType (5,"福利","福利");
 
 
 }

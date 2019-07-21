@@ -24,41 +24,54 @@ class SuperImage extends BaseStatefulWidget {
   final Key key;
   final num scale;
   final String src;
+  final String errorSrc;
+  final SuperImageController controller;
 
   @override
   State<StatefulWidget> createState() {
     return _State();
   }
 
-  SuperImage.network(
-    this.src, {
-    this.key,
-    this.scale = 1.0,
-    this.semanticLabel,
-    this.excludeFromSemantics = false,
-    this.width,
-    this.height,
-    this.color,
-    this.colorBlendMode,
-    this.fit,
-    this.alignment = Alignment.center,
-    this.repeat = ImageRepeat.noRepeat,
-    this.centerSlice,
-    this.matchTextDirection = false,
-    this.gaplessPlayback = false,
-    this.filterQuality = FilterQuality.low,
-  });
+  SuperImage.network(this.src,
+      {this.key,
+      this.scale = 1.0,
+      this.semanticLabel,
+      this.excludeFromSemantics = false,
+      this.width,
+      this.height,
+      this.color,
+      this.colorBlendMode,
+      this.fit,
+      this.alignment = Alignment.center,
+      this.repeat = ImageRepeat.noRepeat,
+      this.centerSlice,
+      this.matchTextDirection = false,
+      this.gaplessPlayback = false,
+      this.filterQuality = FilterQuality.low,
+      String errorSrc,
+      SuperImageController controller})
+      : this.controller = controller ?? DefaultImageController(),
+        this.errorSrc = errorSrc;
 }
 
 class _State extends BaseState<SuperImage> {
   var buf = Completer<Uint8List>();
+  var src;
 
   _State();
 
   @override
   void initState() {
-    cache.loadImage(this.widget.src).then((Uint8List buf) {
+    widget.controller?._attach(this);
+
+    _loadImage();
+  }
+
+  _loadImage() {
+    cache.loadImage(src ?? this.widget.src).then((Uint8List buf) {
       setState(() => this.buf.complete(buf));
+    }).catchError((e) {
+      widget?.controller?.onFailed();
     });
   }
 
@@ -99,28 +112,42 @@ class _State extends BaseState<SuperImage> {
         }
       },
     );
+  }
+}
 
-//    if (buf == null)
-//      return Container(
-//        width: widget.width,
-//        height: widget.height,
-//        child: Center(child: CircularProgressIndicator()),
-//      );
-//    return Image.memory(buf,
-//        width: this.widget.width,
-//        height: widget.height,
-//        color: widget.color,
-//        filterQuality: widget.filterQuality,
-//        colorBlendMode: widget.colorBlendMode,
-//        fit: widget.fit,
-//        alignment: widget.alignment,
-//        repeat: widget.repeat,
-//        centerSlice: widget.centerSlice,
-//        matchTextDirection: widget.matchTextDirection,
-//        gaplessPlayback: widget.gaplessPlayback,
-//        semanticLabel: widget.semanticLabel,
-//        excludeFromSemantics: widget.excludeFromSemantics,
-//        key: widget.key,
-//        scale: widget.scale);
+class SuperImageController {
+  VoidCallback onFailed;
+
+  _State state;
+
+  void _attach(_State state) {
+    this.state = state;
+  }
+
+  void setUrl(String url) {
+    state.src = url;
+    state._loadImage();
+  }
+}
+
+class DefaultImageController extends SuperImageController {
+  DefaultImageController() {
+    this.onFailed = () {
+      setUrl(state.widget.errorSrc);
+    };
+  }
+}
+
+class RetryImageController extends SuperImageController {
+  RetryImageController(List<String> newUrls, int retryCount) {
+    int currentIndex = 0;
+    int currentTime = 0;
+    this.onFailed = () {
+      if (currentIndex == newUrls.length) return;
+      setUrl(newUrls[currentIndex]);
+      if ((++currentTime % retryCount == 0)) {
+        currentIndex++;
+      }
+    };
   }
 }

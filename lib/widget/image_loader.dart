@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
+import 'package:gank_flutter/base/logger/logger.dart';
 import 'package:gank_flutter/base/net/okhttp.dart';
 import 'package:gank_flutter/platform/file_provider.dart';
 
@@ -17,7 +18,9 @@ class ImageCache {
     Uint8List result;
     if ((result = loadFromMemory(src)) != null) return result;
     if ((result = await _loadFromDisk(src)) != null) return result;
-    return addToMemCache(src, await _loadFromNetWork(src));
+    if ((result = await _loadFromNetWork(src)) != null)
+      return addToMemCache(src, result);
+    throw Exception("request failed");
   }
 
   Uint8List addToMemCache(String url, Uint8List mem) {
@@ -40,13 +43,20 @@ class ImageCache {
   }
 
   Future<Uint8List> _loadFromNetWork(String src) async {
-    Response resp = await _httpClient.get(src);
-    // add to local cache
-    var buf = await resp.toIntArray();
-    final file = File(_externalDir + "/${_generateMd5(src)}");
-    file.writeAsBytes(buf, flush: true);
-    //
-    return Uint8List.fromList(buf);
+    Response resp;
+    try {
+      resp = await _httpClient.get(src);
+
+      // add to local cache
+      var buf = await resp.toIntArray();
+      final file = File(_externalDir + "/${_generateMd5(src)}");
+      file.writeAsBytes(buf, flush: true);
+      //
+      return Uint8List.fromList(buf);
+    } catch (e) {
+      logger.e(e);
+      return null;
+    }
   }
 
   String _generateMd5(String data) {

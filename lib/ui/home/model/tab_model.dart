@@ -3,32 +3,32 @@ import 'package:gank_flutter/base/net/okhttp.dart';
 import 'package:gank_flutter/base/spider.dart';
 import 'package:gank_flutter/ui/home/model/type.dart';
 
-class TabModel {
-  static final _okClient = OkHttpClient("http://gank.io/api");
-  static final spider = WallPaperSpider();
+final _okClient = OkHttpClient("http://gank.io/api");
+final _spider = WallPaperSpider();
 
+class TabModel {
   List data = [];
-  int currentPage = 1;
+  List gankMeizi = [];
+  int _currentPage = 1;
 
   TabModel();
 
-  Future loadTodayData() async {
+  Future<void> loadMoreWallPaper(int page, [bool top = true]) async {
+    Set loaded = await _spider.getRandomWallPaper(page);
+    if (top) {
+      data.insertAll(0, loaded);
+    } else {
+      data.addAll(loaded);
+    }
+  }
+
+  Future<void> loadTodayData() async {
     var temp = await _okClient.get("/today");
     var resp = await temp.toJsonObject();
     final results = resp["results"];
 
     for (final category in resp["category"]) {
       data.addAll((results[category]));
-    }
-  }
-
-  Future<Set> loadMoreWallPaper(int page, [bool top = true]) async {
-    Set loaded = await spider.getRandomWallPaper(page);
-//    data.clear();
-    if (top) {
-      data.insertAll(0, loaded);
-    } else {
-      data.addAll(loaded);
     }
   }
 
@@ -43,9 +43,22 @@ class TabModel {
       default:
     }
 
-    final temp = await _okClient.get("/data/${type.param}/10/$currentPage");
+    final results = await _load(type.param, _currentPage);
+    data.addAll(results);
+  }
+
+  int _meiziPage = 0;
+
+  Future loadMeiziData() async {
+    var result = await _load(TabType.PRETTY.param, _meiziPage);
+    gankMeizi.addAll(result);
+    _meiziPage++;
+  }
+
+  Future<List> _load(String type, int page) async {
+    final temp = await _okClient.get("/data/${type}/10/$page");
     var resp = await temp.toJsonObject();
     final results = resp["results"];
-    data.addAll(results);
+    return results;
   }
 }
