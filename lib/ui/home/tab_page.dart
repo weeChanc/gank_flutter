@@ -89,10 +89,17 @@ class _HomeTabPageState extends BaseState<HomeTabPage> {
 
   // -emmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm=======================
 
+  bool firstIn = true;
+
   Future _onRefresh() async {
     model.gankMeizi.clear();
+    model.data.clear();
     await model.loadTypeData(_type);
     await model.loadMeiziData();
+    if (firstIn) {
+      key = new GlobalKey();
+      firstIn = false;
+    }
     setState(() {});
   }
 
@@ -171,12 +178,13 @@ class _HomeTabPageState extends BaseState<HomeTabPage> {
                   onPressed: () {
                     final file = File(FileProvider.getCacheDirPath() +
                         "/${_generateMd5(controller.state.src ?? url1)}");
-                    final newPath = FileProvider.getExternalDir() +
-                        "/${fileName}";
+                    final newPath =
+                        FileProvider.getExternalDir() + "/${fileName}";
                     file.copy(newPath);
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text("文件保存到${newPath}")));
+                    Scaffold.of(context).showSnackBar(
+                        SnackBar(content: Text("文件保存到${newPath}")));
                   },
                 )
               ]);
@@ -189,20 +197,54 @@ class _HomeTabPageState extends BaseState<HomeTabPage> {
     );
   }
 
+  GlobalKey<AnimatedListState> key = GlobalKey();
+
   Widget _createTypeTab() {
     return Center(
-      child: RefreshIndicator(
-        key: _refreshStateKey,
-        child: ListView.builder(
-            itemCount: model.data.length,
-            itemBuilder: (ctx, pos) {
-              if (pos == 0 && _type == TabType.TODAY) {
-                return _createMeiziWall();
-              }
-              var data = model.data[pos];
-              return createListViewItem(data);
-            }),
-        onRefresh: _onRefresh,
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: RefreshIndicator(
+              key: _refreshStateKey,
+              child: AnimatedList(
+                  key: key,
+                  initialItemCount: 2,
+                  itemBuilder: (ctx, pos, ani) {
+                    return Container(
+                      height: 100,
+                      child: Column(
+                        children: <Widget>[
+                          Container(height: 12, color: Colors.white,),
+                          Container(height: 80, color: Colors.orange,)
+                        ],
+                      ),
+                    );
+//                    if (pos == 0 && _type == TabType.TODAY) {
+//                      return _createMeiziWall();
+//                    }
+//                    var data = model.data[pos];
+//                    return SizeTransition(
+//                      sizeFactor: ani,
+//                      child: createListViewItem(data),
+//                    );
+                  }),
+              onRefresh: _onRefresh,
+            ),
+          ),
+          MaterialButton(
+            color: Colors.blue,
+            onPressed: () {
+//              model.data.insert(1, {
+//                "createAt": "123412341",
+//                "who": "good",
+//                "desc": 'descss',
+//                "type": "ttttt"
+//              });
+              key.currentState.insertItem(0);
+              setState(() {});
+            },
+          )
+        ],
       ),
     );
   }

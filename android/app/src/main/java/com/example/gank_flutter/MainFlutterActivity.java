@@ -39,6 +39,8 @@ public class MainFlutterActivity extends BoostFlutterActivity {
                     }
                     result.error("method not match", null, null);
                 });
+
+
     }
 
     @Override
